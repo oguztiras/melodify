@@ -1,0 +1,43 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container">
+        <h4>Filter</h4>
+        <form class="mb-5" id="searchForm">
+            <select class="form-control" name="city" id="city">
+                <option value="" disabled selected>City:</option>
+                <option value="berlin">Berlin</option>
+                <option value="munich">Munich</option>
+                <option value="hamburg">Hamburg</option>
+            </select>
+            <select class="form-control" name="level" id="level">
+                <option value="" disabled selected>Level:</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+            </select>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+    
+    <div id="profiles_container">
+        {% for profile in profiles %}
+
+            <div class="container mb-5">
+                <h3>
+                    <a href="{% url 'client' profile.id %}" class="text-decoration-none text-capitalize">{{ profile.instructor.username }}</a>
+                </h3>
+                <div>{{ profile.bio|slice:":200" }}...</div>
+                <div class="fw-semibold text-capitalize">{{ profile.city }}</div>
+                <div class="fw-semibold text-capitalize">{{ profile.level }}</div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tunementor/index.js' %}"></script>
+{% endblock %}

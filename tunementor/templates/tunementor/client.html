@@ -1,0 +1,70 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'tunementor/client.css' %}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h2 class="text-capitalize">{{profile.instructor.username }}</h2>
+        <div class="mb-3">{{ profile.bio }}</div>
+        <div class="fw-bold text-capitalize">{{ profile.city }}</div>
+        <div class="fw-bold text-capitalize mb-3">{{ profile.level }}</div>
+
+        <form id="messageForm">
+            <input type="hidden" name="messageReceiver" id="messageReceiver" value="{{ profile.instructor.id }}">
+            <textarea class="form-control mb-1" name="message" id="message" rows="5" placeholder="Your Message..." required></textarea>
+            <button class="btn btn-primary" type="submit">Send Message</button>
+        </form> 
+
+        <p id="messageResponse"></p>
+    </div>
+
+    <div class="container mb-3 fw-bold" id="avrRating">
+        Average Rating: {{ avr_rating }}
+    </div>
+
+    {% if user.role == "apprentice" and user.username not in reviewers %}
+        <div class="container mb-3">
+            <form id="reviewForm">
+                <input type="hidden" name="instructorProfileId" id="instructorProfileId" value="{{ profile.id }}">
+                <textarea class="form-control mb-1" name="comment" id="comment" rows="5" placeholder="Your Comment..." required></textarea>
+                <select class="form-control mb-1" name="rating" id="rating" required>
+                    <option value="" selected disabled>Select a Rate</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Send Review</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <div class="container mb-3">
+        <h3>Reviews</h3>
+    </div>
+
+    <div id="reviewsContainer">
+        {% for review in reviews %}
+
+            <div data-review-id="{{review.id}}" class="container mb-2 border-bottom border-1 pb-3">
+                <div>Reviwer: {{ review.reviewer.username }}</div>
+                <div class="reviewComment">Comment: {{ review.comment }}</div>
+                <div class="reviewRating">Rating: {{ review.rating }}</div>
+                {% if user.username == review.reviewer.username %}
+                    <button class="btn btn-secondary" id="editReviewBtn">edit</button>
+                {% endif %}
+            </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tunementor/client.js' %}"></script>
+{% endblock %}

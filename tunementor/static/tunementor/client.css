@@ -1,0 +1,15 @@
+@keyframes disappear {
+    0% {
+       opacity: 1; 
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+#messageForm, #reviewForm {
+    animation-name: disappear;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
+}

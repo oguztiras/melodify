@@ -1,0 +1,29 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="container mb-5">
+        <h2>Messages</h2>
+    </div>
+
+    <div class="container" id="messageContainer">
+        {% for msg_object in msg_objects %}
+
+            <div data-message-id="{{ msg_object.id }}" class="mb-2 border-bottom border-1 pb-3">
+                <div class="fw-bold">Sender: {{ msg_object.sender.email }}</div>
+                <div>Message: {{ msg_object.message }}</div>
+                <div class="mb-1">Time: {{ msg_object.timestamp }}</div>
+                <button class="btn btn-outline-secondary btn-delete">Delete</button>
+            </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        const dltMsgUrl = "{% url 'delete_msg' %}";
+    </script>
+    <script src="{% static 'tunementor/message.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container">
+        <h3>{{ user.username|capfirst }}</h3>
+
+        <form action="{% url 'my_profile' user.id %}" method="post">
+            {% csrf_token %}
+            {% if profile %}
+                <input name="profile_id" type="hidden" value="{{ profile.id }}">
+            {% endif %}
+            <textarea class="form-control" rows="15" name="bio" id="bio" required>{% if profile %}{{ profile.bio }}{% else %}Your Bio...{% endif %}
+            </textarea>
+            <select class="form-control" name="city" id="city" required>
+                {% if profile %}
+                    <option value="{{ profile.city }}" selected>{{ profile.city|capfirst }}</option>
+                {% endif %}
+                <option value="berlin">Berlin</option>
+                <option value="munich">Munich</option>
+                <option value="hamburg">Hamburg</option>
+            </select>
+            <select class="form-control" name="level" id="level" required>
+                {% if profile %}
+                    <option value="{{ profile.level }}" selected>{{ profile.level|capfirst }}</option>
+                {% endif %}
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+            </select>
+            <input class="btn btn-primary" type="submit" value="Save">
+        </form>
+
+        <div>
+            {{ message }}
+        </div>
+    </div>
+
+{% endblock %}
