@@ -1,0 +1,22 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-danger text-white">
+            <h2 class="card-title mb-0">Cancel Booking for {{ booking.event.title }}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="cancellation_reason" class="form-label">Reason for cancellation:</label>
+                <textarea name="cancellation_reason" id="cancellation_reason" rows="3" class="form-control" placeholder="Enter your cancellation reason..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Cancel Booking</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

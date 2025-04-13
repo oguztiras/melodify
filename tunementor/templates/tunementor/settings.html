@@ -1,0 +1,59 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header text-white" style="background-color: #cc66ff">
+                    <h4 class="mb-0">Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                        <!-- General Actions -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">General</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="{% url 'my_profile' user.id %}" class="btn btn-outline-primary m-1">My Profile</a>
+                                <a href="{% url 'update_profile' %}" class="btn btn-outline-primary m-1">Update Profile</a>
+                                <a href="{% url 'conversation_list' %}" class="btn btn-outline-primary m-1">Conversations</a>
+                            </div>
+                        </div>
+
+                        {% if user.role == "instructor" %}
+                        <!-- Instructor Specific Actions -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Instructor Panel</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="{% url 'create_event' %}" class="btn btn-outline-success m-1">Create Lesson</a>
+                                <a href="{% url 'instructor_reviews' %}" class="btn btn-outline-success m-1">Received Reviews</a>
+                                <a href="{% url 'instructor_calendar' user.id %}" class="btn btn-outline-success m-1">Instructor Calendar</a>
+                                <a href="{% url 'booked_instructor' %}" class="btn btn-outline-success m-1">My Booked Lesson</a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if user.role == "apprentice" %}
+                        <!-- Apprentice Specific Actions -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Apprentice Panel</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="{% url 'my_reviews' %}" class="btn btn-outline-warning m-1">Sent Reviews</a>
+                                <a href="{% url 'booked_apprentice' %}" class="btn btn-outline-warning m-1">Booked Lesson</a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Account & Logout -->
+                        <div class="d-flex flex-wrap">
+                            <a href="{% url 'change_pass' user.id %}" class="btn btn-outline-danger m-1">Change Password</a>
+                            <a href="{% url 'logout' %}" class="btn btn-danger m-1">Logout</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

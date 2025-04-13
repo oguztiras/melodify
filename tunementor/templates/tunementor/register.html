@@ -1,0 +1,24 @@
+{% extends "tunementor/layout.html" %}
+
+{% block body %}
+    <div class="container mb-3">
+        <h2 class="mb-3">Register</h2>
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control" type="text" autofocus name="username" placeholder="Username">
+            <input class="form-control" type="email" name="email" placeholder="Email">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password" oninput="this.setCustomValidity(this.value !== password.value ? 'Passwords do not match.' : '')">
+            <select class="form-control mb-3" name="role" id="role" required>
+                <option value="" disabled selected>Your Role:</option>
+                <option value="apprentice">Apprentice</option>
+                <option value="instructor">Instructor</option>
+            </select>
+            <input class="btn btn-primary" type="submit" value="Register">
+        </form>
+
+        Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+    </div>
+
+    <div class="container fw-bold text-danger" id="message">{{ message }}</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container">
+        <h3>{{ user.username|capfirst }}</h3>
+
+        <form class="mb-3" action="{% url 'change_pass' user.id %}" method="post">
+            {% csrf_token %}
+            <input class="form-control" name="password" type="password" placeholder="Password">
+            <input class="form-control" name="password_new" type="password" placeholder="New Password">
+            <input class="form-control" name="confirmation" type="password" placeholder="New Password Again">
+            <input class="btn btn-primary" type="submit" value="Change Password">
+        </form>
+    </div>
+
+{% endblock %}

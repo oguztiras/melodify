@@ -1,0 +1,68 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #cc66ff">
+            <h2 class="mb-0">My Profile</h2>
+            <div>
+                <a href="{% url 'conversation_list' %}" class="btn btn-outline-light">
+                    <i class="fa-solid fa-envelope fa-2x"></i>
+                </a>
+                <a href="{% url 'settings' user.id %}" class="btn btn-outline-light">
+                    <i class="fa-solid fa-gear fa-2x"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if profile %}
+                <div class="row align-items-center">
+                    <!-- Profile picture column -->
+                    <div class="col-md-4 text-center">
+                        {% if profile.instructor.profile_picture %}
+                            <img src="{{ profile.instructor.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="max-width:150px;">
+                        {% else %}
+                            <img src="{% static 'tunementor/images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="max-width:150px;">
+                        {% endif %}
+                    </div>
+                    <!-- Profile details column -->
+                    <div class="col-md-8">
+                        <p class="mb-2"><strong>Username:</strong> {{ profile.instructor.username }}</p>
+                        <p class="mb-2"><strong>Email:</strong> {{ profile.instructor.email }}</p>
+                        <p class="mb-2"><strong>Bio:</strong> {{ profile.bio }}</p>
+                        <p class="mb-2"><strong>City:</strong> {{ profile.city }}</p>
+                        <p class="mb-2"><strong>Level:</strong> {{ profile.level }}</p>
+                        <p class="mb-2"><strong>Instruments:</strong></p>
+                        {% if profile.instruments.all %}
+                            <ul class="list-group">
+                                {% for instrument in profile.instruments.all %}
+                                    <li class="list-group-item">{{ instrument.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No instruments selected.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if appr %}
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                        {% if appr.profile_picture %}
+                            <img src="{{ appr.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="max-width:150px;">
+                        {% else %}
+                            <img src="{% static 'tunementor/images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="max-width:150px;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <p class="mb-2"><strong>Username:</strong> {{ appr.username }}</p>
+                        <p class="mb-2"><strong>Email:</strong> {{ appr.email }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

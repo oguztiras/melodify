@@ -1,0 +1,125 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'tunementor/client.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <!-- Profile Information Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header text-white" style="background-color: #cc66ff">
+            <h2 class="card-title text-capitalize mb-0">{{ profile.instructor.username }}</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">{{ profile.bio }}</p>
+            <p class="fw-bold text-capitalize mb-1">City: {{ profile.city }}</p>
+            <p class="fw-bold text-capitalize mb-3">Level: {{ profile.level }}</p>
+            <div class="fw-bold text-capitalize mb-3">
+            <p>Instruments:</p>
+            <ul class="list-unstyled">
+                {% for instrument in profile.instruments.all %}
+                <li class="mb-1">- {{ instrument.name }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+            <!-- Calendar Link -->
+            <div class="mb-3">
+            <a href="{% url 'instructor_calendar' profile.instructor.id %}" class="btn btn-secondary">
+                Instructor Calendar
+            </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messaging Section Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white">
+            {% if conversation %}
+            <h4 class="mb-0">Chat with {{ profile.instructor.username }}</h4>
+            {% else %}
+            <h4 class="mb-0">Start a Conversation</h4>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if conversation %}
+            <a href="{% url 'conversation_detail' conversation.id %}" class="btn btn-primary">
+                Chat with {{ profile.instructor.username }}
+            </a>
+            {% else %}
+            <form method="post" action="{% url 'send_message' %}">
+                {% csrf_token %}
+                <input type="hidden" name="recipient_id" value="{{ profile.instructor.id }}">
+                <div class="mb-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Type your message..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Start Conversation</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Average Rating Card -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Average Rating</h5>
+            <p class="card-text fw-bold">{{ avr_rating }}</p>
+        </div>
+        </div>
+
+        <!-- Review Submission Card (for Apprentices only) -->
+        {% if user.role == "apprentice" and user.username not in reviewers %}
+        <div class="card shadow mb-4">
+        <div class="card-header bg-warning text-white">
+            <h4 class="mb-0">Submit Review</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'submit_review' profile.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <textarea class="form-control" name="comment" rows="5" placeholder="Your Comment..." required></textarea>
+            </div>
+            <div class="mb-3">
+                <select class="form-select" name="rating" required>
+                <option value="" selected disabled>Select a Rating</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Send Review</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Existing Reviews Card -->
+    <div class="card shadow mb-4" id="reviewsContainer">
+        <div class="card-header bg-secondary text-white">
+            <h3 class="mb-0">Reviews</h3>
+        </div>
+        <div class="card-body">
+            {% for review in reviews %}
+            <div data-review-id="{{ review.id }}" class="mb-3 border-bottom pb-3">
+            <p class="mb-1"><strong>Reviewer:</strong> {{ review.reviewer.username }}</p>
+            <p class="mb-1"><strong>Comment:</strong> {{ review.comment }}</p>
+            <p class="mb-1"><strong>Rating:</strong> {{ review.rating }}</p>
+            {% if user.username == review.reviewer.username %}
+            <a href="{% url 'submit_review' profile.id %}" class="btn btn-secondary btn-sm">Edit Review</a>
+            {% endif %}
+            </div>
+            {% empty %}
+            <p class="text-muted">No reviews yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'tunementor/client.js' %}"></script>
+{% endblock %}

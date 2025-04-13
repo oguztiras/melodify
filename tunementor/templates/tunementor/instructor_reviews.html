@@ -1,0 +1,38 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <!-- Main Card for Reviews -->
+    <div class="card shadow">
+        <div class="card-header text-white" style="background-color: #cc66ff">
+            <h2 class="card-title mb-0">Reviews for {{ profile.instructor.username }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Average Rating:</strong> {{ average_rating|default:"N/A" }}</p>
+            {% if reviews %}
+                <div class="row">
+                {% for review in reviews %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Reviewer: {{ review.reviewer.username }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Rating: {{ review.rating }}</h6>
+                                <p class="card-text">Comment: {{ review.comment }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">{{ review.timestamp|date:"Y-m-d H:i" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    No reviews yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Reviews</h2>
+    {% if reviews %}
+        <div class="row">
+            {% for review in reviews %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <strong>Instructor:</strong>
+                            <a href="{% url 'client' review.instructor_profile.id %}" class="text-decoration-none">
+                                {{ review.instructor_profile.instructor.username }}
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Rating:</strong> {{ review.rating }}</p>
+                            <p class="card-text"><strong>Comment:</strong> {{ review.comment }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            You haven't submitted any reviews yet.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

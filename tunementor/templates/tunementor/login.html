@@ -1,0 +1,16 @@
+{% extends "tunementor/layout.html" %}
+
+{% block body %}
+
+    <div class="container mb-3">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control" type="text" autofocus name="username" placeholder="Username">
+            <input class="form-control mb-3" name="password" type="password" placeholder="Password">
+            <input class="btn btn-primary" type="submit" value="Login">
+        </form>
+        Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    </div>
+
+    <div class="container fw-bold text-danger" id="message">{{ message }}</div>
+{% endblock %}

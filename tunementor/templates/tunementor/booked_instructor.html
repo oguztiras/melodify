@@ -1,0 +1,44 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">Booked Events for {{ instructor.username }}</h2>
+    <p class="mb-4">Events that have been booked by apprentices.</p>
+
+    <div class="row">
+    {% for event in events %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                <h5 class="card-title">{{ event.title }}</h5>
+                <p class="card-text">
+                    <small class="text-muted">
+                    {{ event.start|date:"Y-m-d H:i" }} - {{ event.end|date:"Y-m-d H:i" }}
+                    </small>
+                </p>
+                {% if event.booking %}
+                    <p class="card-text">
+                    <strong>Booked by:</strong> {{ event.booking.apprentice.username }}<br>
+                    <strong>Status:</strong> {{ event.booking.get_state_display }}
+                    </p>
+                    {% if event.booking.state == "scheduled" %}
+                    <a href="{% url 'confirm_booking' event.booking.id %}" class="btn btn-success btn-sm me-2">Confirm Booking</a>
+                    <a href="{% url 'cancel_booking' event.booking.id %}" class="btn btn-danger btn-sm">Cancel Booking</a>
+                    {% elif event.booking.state == "confirmed" %}
+                    <a href="{% url 'cancel_booking' event.booking.id %}" class="btn btn-danger btn-sm">Cancel Booking</a>
+                    {% elif event.booking.state == "cancelled" %}
+                    <p class="text-danger"><em>Cancelled: {{ event.booking.cancellation_reason }}</em></p>
+                    {% endif %}
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col">
+        <div class="alert alert-info">No booked events found.</div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

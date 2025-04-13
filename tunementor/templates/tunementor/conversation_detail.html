@@ -1,0 +1,68 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+    <div class="col-md-8">
+        <!-- Conversation Header with Back Link -->
+        <div class="card mb-4 shadow">
+        <div class="card-header d-flex justify-content-between align-items-center bg-info text-white">
+            <h4 class="mb-0">
+            Conversation with 
+            {% for participant in conversation.participants.all %}
+                {% if participant.id != request.user.id %}
+                {{ participant.username }}
+                {% endif %}
+            {% endfor %}
+            </h4>
+            <a href="{% url 'conversation_list' %}" class="btn btn-light btn-sm">Back to Conversations</a>
+        </div>
+        </div>
+
+        <!-- Messages Display -->
+        <div class="card mb-4 shadow">
+        <div class="card-body">
+            <div class="messages">
+            {% for msg in msgs %}
+                <div class="mb-3">
+                {% if msg.sender.id == request.user.id %}
+                    <div class="alert alert-primary">
+                    <p class="mb-1"><strong>{{ msg.sender.username }}:</strong> {{ msg.message }}</p>
+                    <small class="text-muted">{{ msg.timestamp|date:"Y-m-d H:i" }}</small>
+                    </div>
+                {% else %}
+                    <div class="alert alert-secondary">
+                    <p class="mb-1"><strong>{{ msg.sender.username }}:</strong> {{ msg.message }}</p>
+                    <small class="text-muted">{{ msg.timestamp|date:"Y-m-d H:i" }}</small>
+                    </div>
+                {% endif %}
+                </div>
+            {% empty %}
+                <p class="text-muted">No messages in this conversation yet.</p>
+            {% endfor %}
+            </div>
+        </div>
+        </div>
+
+        <!-- Send Message Form -->
+        <div class="card shadow">
+        <div class="card-header">
+            <h5 class="mb-0">Send a Message</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'send_message' %}">
+            {% csrf_token %}
+            <input type="hidden" name="conversation_id" value="{{ conversation.id }}">
+            <div class="form-group">
+                <textarea name="message" rows="4" placeholder="Type your message here..." class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Send</button>
+            </form>
+        </div>
+        </div>
+
+    </div>
+    </div>
+</div>
+{% endblock %}

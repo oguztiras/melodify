@@ -1,0 +1,39 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Booked Events</h2>
+    <p class="mb-4">Below are the events you have booked.</p>
+
+    <div class="row">
+        {% for booking in bookings %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ booking.event.title }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">
+                        {{ booking.event.start|date:"Y-m-d H:i" }} - {{ booking.event.end|date:"Y-m-d H:i" }}
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <strong>Instructor:</strong> {{ booking.event.creator.username }}<br>
+                        <strong>Status:</strong> {{ booking.get_state_display }}
+                    </p>
+                    {% if booking.state == "scheduled" or booking.state == "confirmed" %}
+                        <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger btn-sm">Cancel Booking</a>
+                    {% elif booking.state == "cancelled" %}
+                        <p class="text-danger"><em>Cancelled: {{ booking.cancellation_reason }}</em></p>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <div class="alert alert-info">You have no booked events.</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

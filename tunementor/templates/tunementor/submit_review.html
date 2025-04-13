@@ -1,0 +1,29 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container">
+        <h2>{% if review %}Edit{% else %}Submit{% endif %} Review for {{ instructor_profile.instructor.username }}</h2>
+        <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="rating">Rating:</label>
+            <select name="rating" id="rating" required class="form-control">
+                <option value="" disabled {% if not review %}selected{% endif %}>Select a rating</option>
+                {% for i in "12345"|make_list %}
+                    <option value="{{ i }}" {% if review and review.rating|stringformat:"s" == i %}selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="comment">Comment:</label>
+            <textarea name="comment" id="comment" rows="5" class="form-control" placeholder="Your comment...">{% if review %}{{ review.comment }}{% endif %}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            {% if review %}Update Review{% else %}Submit Review{% endif %}
+        </button>
+        </form>
+    </div>
+
+{% endblock %}

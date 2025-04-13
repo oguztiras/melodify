@@ -1,0 +1,77 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <!-- Beautiful Header Section -->
+    <div class="container-fluid text-white py-5 mb-5" style="background-color: #cc66ff">
+        <div class="container">
+            <h1 class="display-4">Instructor Directory</h1>
+            <p class="lead">
+            Explore expert instructors from various cities and skill levels. Find your perfect match to elevate your learning journey!
+            </p>
+        </div>
+    </div>
+
+    <!-- Filter Form Section -->
+    <div class="container mb-5">
+        <div class="card shadow">
+            <div class="card-body">
+            <h4 class="card-title">Filter</h4>
+            <form class="row g-3" id="searchForm">
+                <div class="col-md-5">
+                <select class="form-select" name="city" id="city">
+                    <option value="" disabled selected>City:</option>
+                    <option value="berlin">Berlin</option>
+                    <option value="munich">Munich</option>
+                    <option value="hamburg">Hamburg</option>
+                </select>
+                </div>
+                <div class="col-md-5">
+                <select class="form-select" name="level" id="level">
+                    <option value="" disabled selected>Level:</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                </select>
+                </div>
+                <div class="col-md-2 d-grid">
+                <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profiles List Section -->
+    <div class="container" id="profiles_container">
+        <div class="row">
+            {% for profile in profiles %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-capitalize">
+                    <a href="{% url 'client' profile.id %}" class="text-decoration-none">
+                        {{ profile.instructor.username }}
+                    </a>
+                    </h3>
+                    <p class="card-text">{{ profile.bio|slice:":200" }}...</p>
+                </div>
+                <div class="card-footer">
+                    <div class="fw-semibold text-capitalize">City: {{ profile.city }}</div>
+                    <div class="fw-semibold text-capitalize">Level: {{ profile.level }}</div>
+                </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">No profiles found.</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tunementor/index.js' %}"></script>
+{% endblock %}

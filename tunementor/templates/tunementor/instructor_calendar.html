@@ -1,0 +1,33 @@
+{% extends "tunementor/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">{{ instructor.username }}'s Available Lesson Slots</h2>
+    <p class="mb-4">Below are the events that are available for booking.</p>
+
+    <div class="row">
+        {% for event in events %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">
+                        {{ event.start|date:"Y-m-d H:i" }} - {{ event.end|date:"Y-m-d H:i" }}
+                        </small>
+                    </p>
+                    {% if request.user.role == "apprentice" %}
+                        <a href="{% url 'book_event' event.id %}" class="btn btn-primary">Book this slot</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <div class="alert alert-info">No available events.</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
